@@ -1,11 +1,16 @@
-[<img src="https://hotio.dev/img/qbittorrent.png" alt="logo" height="130" width="130">](https://github.com/qbittorrent/qbittorrent)
+[<img src="https://hotio.dev/img/qflood.png" alt="logo" height="130" width="130">](https://github.com/jesec/flood)
 
-[![GitHub Source](https://img.shields.io/badge/github-source-ffb64c?style=flat-square&logo=github&logoColor=white&labelColor=757575)](https://github.com/hotio/qbittorrent)
-[![GitHub Registry](https://img.shields.io/badge/github-registry-ffb64c?style=flat-square&logo=github&logoColor=white&labelColor=757575)](https://github.com/orgs/hotio/packages/container/package/qbittorrent)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hotio/qbittorrent?color=ffb64c&style=flat-square&label=pulls&logo=docker&logoColor=white&labelColor=757575)](https://hub.docker.com/r/hotio/qbittorrent)
+[![GitHub Source](https://img.shields.io/badge/github-source-ffb64c?style=flat-square&logo=github&logoColor=white&labelColor=757575)](https://github.com/hotio/qflood)
+[![GitHub Registry](https://img.shields.io/badge/github-registry-ffb64c?style=flat-square&logo=github&logoColor=white&labelColor=757575)](https://github.com/orgs/hotio/packages/container/package/qflood)
+[![Docker Pulls](https://img.shields.io/docker/pulls/hotio/qflood?color=ffb64c&style=flat-square&label=pulls&logo=docker&logoColor=white&labelColor=757575)](https://hub.docker.com/r/hotio/qflood)
 [![Discord](https://img.shields.io/discord/610068305893523457?style=flat-square&color=ffb64c&label=discord&logo=discord&logoColor=white&labelColor=757575)](https://hotio.dev/discord)
-[![Upstream](https://img.shields.io/badge/upstream-project-ffb64c?style=flat-square&labelColor=757575)](https://github.com/qbittorrent/qbittorrent)
-[![Website](https://img.shields.io/badge/website-hotio.dev-ffb64c?style=flat-square&labelColor=757575)](https://hotio.dev/containers/qbittorrent)
+[![Upstream Flood](https://img.shields.io/badge/upstream-flood-ffb64c?style=flat-square&labelColor=757575)](https://github.com/jesec/flood)
+[![Upstream qBittorrent](https://img.shields.io/badge/upstream-qbittorrent-ffb64c?style=flat-square&labelColor=757575)](https://github.com/jesec/https://github.com/qbittorrent/qbittorrent)
+[![Website](https://img.shields.io/badge/website-hotio.dev-ffb64c?style=flat-square&labelColor=757575)](https://hotio.dev/containers/qflood)
+
+## What is this?
+
+A docker image with qBittorrent and the Flood UI, also optional WireGuard VPN support.
 
 ## Starting the container
 
@@ -13,14 +18,16 @@ CLI:
 
 ```shell
 docker run --rm \
-    --name qbittorrent \
+    --name qflood \
     -p 8080:8080 \
+    -p 3000:3000 \
     -e PUID=1000 \
     -e PGID=1000 \
     -e UMASK=002 \
     -e TZ="Etc/UTC" \
+    -e FLOOD_AUTH="false" \
     -v /<host_folder_config>:/config \
-    hotio/qbittorrent
+    hotio/qflood
 ```
 
 Compose:
@@ -29,16 +36,18 @@ Compose:
 version: "3.7"
 
 services:
-  qbittorrent:
-    container_name: qbittorrent
-    image: hotio/qbittorrent
+  qflood:
+    container_name: qflood
+    image: hotio/qflood
     ports:
       - "8080:8080"
+      - "3000:3000"
     environment:
       - PUID=1000
       - PGID=1000
       - UMASK=002
       - TZ=Etc/UTC
+      - FLOOD_AUTH=false
     volumes:
       - /<host_folder_config>:/config
 ```
@@ -47,7 +56,7 @@ In most cases you'll need to add additional volumes, depending on your own perso
 
 ## Tags
 
-Go [here](https://hotio.dev/tags-overview/#hotioqbittorrent) to see all available tags.
+Go [here](https://hotio.dev/tags-overview/#hotioqflood) to see all available tags.
 
 ## WireGuard VPN support
 
@@ -65,8 +74,9 @@ CLI:
 
 ```shell
 docker run --rm \
-    --name qbittorrent \
+    --name qflood \
     -p 8080:8080 \
+    -p 3000:3000 \
     -e PUID=1000 \
     -e PGID=1000 \
     -e UMASK=002 \
@@ -75,11 +85,12 @@ docker run --rm \
     -e VPN_LAN_NETWORK="" \
     -e VPN_CONF="wg0" \
     -e VPN_ADDITIONAL_PORTS="" \
+    -e FLOOD_AUTH="false" \
     -v /<host_folder_config>:/config \
     --cap-add=NET_ADMIN \
     --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
     --sysctl="net.ipv6.conf.all.disable_ipv6=0" \
-    hotio/qbittorrent
+    hotio/qflood
 ```
 
 Compose:
@@ -88,11 +99,12 @@ Compose:
 version: "3.7"
 
 services:
-  qbittorrent:
-    container_name: qbittorrent
-    image: hotio/qbittorrent
+  qflood:
+    container_name: qflood
+    image: hotio/qflood
     ports:
       - "8080:8080"
+      - "3000:3000"
     environment:
       - PUID=1000
       - PGID=1000
@@ -102,6 +114,7 @@ services:
       - VPN_LAN_NETWORK
       - VPN_CONF=wg0
       - VPN_ADDITIONAL_PORTS
+      - FLOOD_AUTH=false
     volumes:
       - /<host_folder_config>:/config
     cap_add:
@@ -115,7 +128,7 @@ There needs to be a file `wg0.conf` located in `/config/wireguard` and you need 
 
 The part with `net.ipv6.conf.all.disable_ipv6=0` can be removed or set to `1` if there is no need for ipv6, no attempt will be made in that case to set ip6tables rules and can prevent an error if the module `ip6table_filter` isn't loaded on the host. The WireGuard configuration should not have any ipv6 related stuff when ipv6 is disabled, otherwise creating the interface will fail. If your vpn provider supports ipv6 and you keep it enabled, you'll have full ipv6 connectivity over the vpn connection (confirmed with Mullvad). If for any reason there's a failure trying to setup ip6tables rules, you'll probably need to do `sudo modprobe ip6table_filter` on the host, this will mostly happen on systems that have ipv6 completely disabled.
 
-The environment variable `VPN_LAN_NETWORK`can be set to for example `192.168.1.0/24`, `192.168.1.0/24,192.168.44.0/24` or `192.168.1.33`, so you can get access to the qBittorrent webui.
+The environment variable `VPN_LAN_NETWORK`can be set to for example `192.168.1.0/24`, `192.168.1.0/24,192.168.44.0/24` or `192.168.1.33`, so you can get access to the qflood webui.
 
 If you need to expose additional ports you can use `VPN_ADDITIONAL_PORTS`, for example `VPN_ADDITIONAL_PORTS=7878/tcp,9117/tcp`. Every port in this list will be blocked on the vpn interface, so that there's no risk that they might be exposed to the world via the vpn (mostly there in case your vpn provider screws up and piece of mind). Why would you need this? Wanting to route traffic from other containers over the vpn is probably the most used scenario.
 
@@ -169,11 +182,3 @@ curl -ksG -u "${TORGUARD_USER}":"${TORGUARD_PASS}" --data-urlencode "public-key=
 You will also have to add the additional environment variables `TORGUARD_USER` and `TORGUARD_PASS` or fill them in into the script directly (see `curl` command). These credentials can be found [here](https://torguard.net/clientarea.php?action=changepw).
 
 My experience with getting TorGuard working wasn't the smoothest journey to say the least. I had to click around quite a bit and finally after generating my 3rd config it worked. On the `Netherlands` server for example I didn't get any internet connectivity and at first I was unable to get port forwarding working on the `Germany` server. All of a sudden after generating the 3rd config and also pasting in the ip found under `My Fixed IPs`, that seems to populate when doing a Port Forward Request, I managed to get port forwarding working. So don't give up too soon, it can all work eventually.
-
-## VueTorrent
-
-[<img src="https://hotio.dev/img/vuetorrentui.png" alt="vuetorrentui">](https://github.com/WDaan/VueTorrent)
-
-This image comes bundled with the alternative Web UI VueTorrent, to enable it you'll have to adjust your settings like pictured below.
-
-<img src="https://hotio.dev/img/vuetorrentsettings.png" alt="vuetorrentsettings" width="300">
