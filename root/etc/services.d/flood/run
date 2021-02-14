@@ -3,13 +3,11 @@
 
 umask "${UMASK}"
 
-WEBUI_PORT=$(grep "WebUI.Port=.*" < "${CONFIG_DIR}/config/qBittorrent.conf" | sed "s/WebUI.Port=//")
-
 if [[ ${FLOOD_AUTH} == true ]]; then
     FLOOD_OPTION_AUTH=default && export FLOOD_OPTION_AUTH
-    echo "qBittorrent is on \"http://127.0.0.1:${WEBUI_PORT}\" for Flood configuration."
+    echo "qBittorrent is running on \"http://127.0.0.1:8080\" for Flood configuration."
 else
     FLOOD_OPTION_AUTH=none && export FLOOD_OPTION_AUTH
 fi
 
-exec s6-setuidgid hotio "${APP_DIR}/flood" --rundir "${CONFIG_DIR}/flood" --host 0.0.0.0 --port 3000 --qburl "http://127.0.0.1:${WEBUI_PORT}" --qbuser "dummy" --qbpass "dummy"
+exec s6-setuidgid hotio "${APP_DIR}/flood" --rundir "${CONFIG_DIR}/flood" --host 0.0.0.0 --port 3000 --qburl "http://127.0.0.1:8080" --qbuser "dummy" --qbpass "dummy"
