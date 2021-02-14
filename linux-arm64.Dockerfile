@@ -2,13 +2,13 @@ FROM ghcr.io/hotio/base@sha256:b8ab6a6edfbf3bc4a85f2040672c021462d374e135bccfc6e
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
-ENV VPN_ENABLED="false" VPN_LAN_NETWORK="" VPN_CONF="wg0" VPN_ADDITIONAL_PORTS=""
+ENV VPN_ENABLED="false" VPN_LAN_NETWORK="" VPN_CONF="wg0" VPN_ADDITIONAL_PORTS="" FLOOD_AUTH="false"
 
-EXPOSE 8080
+EXPOSE 3000 8080
 
 RUN ln -s "${CONFIG_DIR}" "${APP_DIR}/qBittorrent"
 
-ARG FULL_VERSION
+ARG QBITTORRENT_FULL_VERSION
 
 RUN apt update && \
     apt install -y --no-install-recommends --no-install-suggests \
@@ -16,7 +16,8 @@ RUN apt update && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:11371 --recv-keys 7CA69FC4 && echo "deb [arch=arm64] http://ppa.launchpad.net/qbittorrent-team/qbittorrent-stable/ubuntu focal main" | tee /etc/apt/sources.list.d/qbitorrent.list && \
     apt update && \
     apt install -y --no-install-recommends --no-install-suggests \
-        qbittorrent-nox=${FULL_VERSION} \
+        qbittorrent-nox=${QBITTORRENT_FULL_VERSION} \
+        mediainfo \
         ipcalc \
         iptables \
         iproute2 \
@@ -28,10 +29,8 @@ RUN apt update && \
     apt clean && \
     rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/*
 
-ARG VUETORRENT_VERSION
-RUN curl -fsSL "https://github.com/wdaan/vuetorrent/releases/download/${VUETORRENT_VERSION}/release.zip" > "/tmp/vuetorrent.zip" && \
-    unzip "/tmp/vuetorrent.zip" -d "${APP_DIR}" && \
-    rm "/tmp/vuetorrent.zip" && \
-    chmod -R u=rwX,go=rX "${APP_DIR}/vuetorrent"
+ARG FLOOD_VERSION
+RUN curl -fsSL "https://github.com/jesec/flood/releases/download/v${FLOOD_VERSION}/flood-linux-arm64" > "${APP_DIR}/flood" && \
+    chmod 755 "${APP_DIR}/flood"
 
 COPY root/ /
