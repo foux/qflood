@@ -1,25 +1,25 @@
 {
   "tags": [
-      {
+    {
       "name": "release",
-      "version": "",
-      "commit": "",
+      "version": "4.3.3.99~202101191832-7248-da0b276d5--4.4.1",
+      "commit": "fb023cd",
       "upstream": "Stable/Releases",
-      "lastUpdated": ""
-      },
-      {
+      "lastUpdated": "2021-02-23T15:02:00.263Z"
+    },
+    {
       "name": "testing",
       "version": "",
       "commit": "",
       "upstream": "",
       "lastUpdated": ""
-      },
-      {
+    },
+    {
       "name": "nightly",
       "version": "",
       "commit": "",
       "upstream": "",
       "lastUpdated": ""
-      }
+    }
   ]
 }
