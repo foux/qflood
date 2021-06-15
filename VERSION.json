@@ -1,6 +1,6 @@
 {
-  "version": "4.3.5.99~202106080759-7366-33e090cfc--4.6.0",
-  "qbittorrent_version": "4.3.5.99~202106080759-7366-33e090cfc",
-  "qbittorrent_full_version": "1:4.3.5.99~202106080759-7366-33e090cfc~ubuntu20.04.1",
+  "version": "4.3.5.99~202106151345-7374-667d4e421--4.6.0",
+  "qbittorrent_version": "4.3.5.99~202106151345-7374-667d4e421",
+  "qbittorrent_full_version": "1:4.3.5.99~202106151345-7374-667d4e421~ubuntu20.04.1",
   "flood_version": "4.6.0"
 }
