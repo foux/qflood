@@ -3,9 +3,9 @@
     {
       "name": "release",
       "version": "4.3.8.99-202110120741-7429-1bae770b2--4.7.0",
-      "commit": "26a3395",
+      "commit": "aa2ec6c",
       "upstream": "Stable/Releases",
-      "lastUpdated": "2021-10-16T03:23:41.349Z"
+      "lastUpdated": "2021-10-16T16:28:56.544Z"
     },
     {
       "name": "testing",
