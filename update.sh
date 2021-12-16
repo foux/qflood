@@ -3,15 +3,14 @@
 if [[ ${1} == "checkdigests" ]]; then
     export DOCKER_CLI_EXPERIMENTAL=enabled
     image="cr.hotio.dev/hotio/base"
-    tag="focal"
+    tag="alpine"
     manifest=$(docker manifest inspect ${image}:${tag})
     [[ -z ${manifest} ]] && exit 1
     digest=$(echo "${manifest}" | jq -r '.manifests[] | select (.platform.architecture == "amd64" and .platform.os == "linux").digest') && sed -i "s#FROM ${image}.*\$#FROM ${image}@${digest}#g" ./linux-amd64.Dockerfile  && echo "${digest}"
-    #digest=$(echo "${manifest}" | jq -r '.manifests[] | select (.platform.architecture == "arm" and .platform.os == "linux" and .platform.variant == "v7").digest') && sed -i "s#FROM ${image}.*\$#FROM ${image}@${digest}#g" ./linux-arm-v7.Dockerfile && echo "${digest}"
     digest=$(echo "${manifest}" | jq -r '.manifests[] | select (.platform.architecture == "arm64" and .platform.os == "linux").digest') && sed -i "s#FROM ${image}.*\$#FROM ${image}@${digest}#g" ./linux-arm64.Dockerfile  && echo "${digest}"
 elif [[ ${1} == "tests" ]]; then
     echo "List installed packages..."
-    docker run --rm --entrypoint="" "${2}" apt list --installed
+    docker run --rm --entrypoint="" "${2}" apk -vv info | sort
     echo "Check if app works..."
     app_url="http://localhost:3000"
     docker run --network host -d --name service "${2}"
@@ -30,8 +29,8 @@ elif [[ ${1} == "screenshot" ]]; then
 else
     flood_version=$(curl -u "${GITHUB_ACTOR}:${GITHUB_TOKEN}" -fsSL "https://api.github.com/repos/jesec/flood/releases/latest" | jq -r .tag_name | sed s/v//g)
     [[ -z ${flood_version} ]] && exit 1
-    qbittorrent_full_version=$(curl -fsSL "http://ppa.launchpad.net/qbittorrent-team/qbittorrent-stable/ubuntu/dists/focal/main/binary-arm64/Packages.gz" | gunzip -c | grep -A 7 -m 1 "Package: qbittorrent-nox" | awk -F ": " '/Version/{print $2;exit}')
-    qbittorrent_version=$(echo "${qbittorrent_full_version}" | sed -e "s/^.*://g" -e "s/~ubuntu.*//g")
+    qbittorrent_full_version=$(curl -u "${GITHUB_ACTOR}:${GITHUB_TOKEN}" -fsSL "https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases" | jq -r '[.[] | select(.prerelease==true)][0] | .tag_name')
+    qbittorrent_version=$(echo "${qbittorrent_full_version}" | sed -e "s/release-//g" -e "s/_.*//g")
     [[ -z ${qbittorrent_version} ]] && exit 1
     version="${qbittorrent_version}--${flood_version}"
     echo '{"version":"'"${version}"'","qbittorrent_version":"'"${qbittorrent_version}"'","qbittorrent_full_version":"'"${qbittorrent_full_version}"'","flood_version":"'"${flood_version}"'"}' | jq . > VERSION.json
