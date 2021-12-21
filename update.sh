@@ -29,7 +29,7 @@ elif [[ ${1} == "screenshot" ]]; then
 else
     flood_version=$(curl -u "${GITHUB_ACTOR}:${GITHUB_TOKEN}" -fsSL "https://api.github.com/repos/jesec/flood/releases/latest" | jq -r .tag_name | sed s/v//g)
     [[ -z ${flood_version} ]] && exit 1
-    qbittorrent_full_version=$(curl -u "${GITHUB_ACTOR}:${GITHUB_TOKEN}" -fsSL "https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases" | jq -r '[.[] | select(.prerelease==true)][0] | .tag_name')
+    qbittorrent_full_version=$(curl -u "${GITHUB_ACTOR}:${GITHUB_TOKEN}" -fsSL "https://api.github.com/repos/userdocs/qbittorrent-nox-static/releases" | jq -r '[.[] | select(.prerelease==false)][0] | .tag_name')
     qbittorrent_version=$(echo "${qbittorrent_full_version}" | sed -e "s/release-//g" -e "s/_.*//g")
     [[ -z ${qbittorrent_version} ]] && exit 1
     version="${qbittorrent_version}--${flood_version}"
