@@ -1,6 +1,6 @@
 {
-  "version": "4.4.1--4.7.0",
-  "qbittorrent_version": "4.4.1",
-  "qbittorrent_full_version": "release-4.4.1_v1.2.15",
+  "version": "4.4.2--4.7.0",
+  "qbittorrent_version": "4.4.2",
+  "qbittorrent_full_version": "release-4.4.2_v1.2.15",
   "flood_version": "4.7.0"
 }
