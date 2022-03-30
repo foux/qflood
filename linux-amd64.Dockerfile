@@ -11,7 +11,7 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/ma
 
 ARG QBITTORRENT_FULL_VERSION
 
-RUN curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${QBITTORRENT_FULL_VERSION}/x86_64-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox" && \
+RUN curl -fsSL "https://github.com/userdocs/qbittorrent-nox-static/releases/download/${QBITTORRENT_FULL_VERSION}/x86_64-icu-qbittorrent-nox" > "${APP_DIR}/qbittorrent-nox" && \
     chmod 755 "${APP_DIR}/qbittorrent-nox"
 
 ARG FLOOD_VERSION
